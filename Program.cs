@@ -1,5 +1,6 @@
 
 using Hotel_Room_Booking_API.Database;
+using Hotel_Room_Booking_API.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace Hotel_Room_Booking_API
@@ -20,6 +21,22 @@ namespace Hotel_Room_Booking_API
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
+            using (var scope = app.Services.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+                // seed initial data
+                if (!db.Rooms.Any())
+                {
+                    db.Rooms.AddRange(
+                        new Room { Id = 1, Name = "101", Type = "Single", IsAvailable = true },
+                        new Room { Id = 2, Name = "102", Type = "Single", IsAvailable = true },
+                        new Room { Id = 3, Name = "201", Type = "Double", IsAvailable = true },
+                        new Room { Id = 4, Name = "301", Type = "Suite", IsAvailable = true }
+                    );
+                    db.SaveChanges();
+                }
+            }
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
