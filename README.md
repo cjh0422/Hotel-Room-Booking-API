@@ -34,14 +34,13 @@ A simple API for managing hotel rooms and bookings, built with **ASP.NET Core We
 4. Testing the API:
    - GET /api/rooms → Returns the list of seeded rooms
    - POST /api/bookings,eg:
-	 ```json
-   {
+
+  {
 	"guestName": "John Doe",
     "roomId": 1,
     "checkInDate": "2025-05-01",
     "checkOutDate": "2025-05-03"
-   ```
-
+}
 
 
 
