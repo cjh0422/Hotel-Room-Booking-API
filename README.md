@@ -35,12 +35,14 @@ A simple API for managing hotel rooms and bookings, built with **ASP.NET Core We
    - GET /api/rooms → Returns the list of seeded rooms
    - POST /api/bookings,eg:
 	 ```json
-{
-  "guestName": "John Doe",
-  "roomId": 1,
-  "checkInDate": "2025-12-20",
-  "checkOutDate": "2025-12-22"
+	{
+"guestName": "John Doe",
+"roomId": 1,
+"checkInDate": "2025-05-01",
+"checkOutDate": "2025-05-03"
 }
+
+
 
 ## Design Decisions
 1. In-Memory Database: Used Microsoft.EntityFrameworkCore.InMemory as specified in the task. This is ideal for testing and development without requiring a real database setup.
