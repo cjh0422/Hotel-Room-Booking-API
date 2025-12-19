@@ -23,14 +23,7 @@ namespace Hotel_Room_Booking_API.Services
             if (room == null) throw new KeyNotFoundException("Room not found");
             if (!room.IsAvailable) throw new InvalidOperationException("Room is not available");
 
-            // Bonus: Prevent overlapping bookings
-            var overlapping = await _bookingRepo.GetAllAsync();
-            var hasOverlap = overlapping.Any(b =>
-                b.RoomId == dto.RoomId &&
-                b.CheckInDate < dto.CheckOutDate &&
-                b.CheckOutDate > dto.CheckInDate);
 
-            if (hasOverlap) throw new InvalidOperationException("Room is already booked for these dates");
 
             room.IsAvailable = false;
             await _roomRepo.UpdateAsync(room);
