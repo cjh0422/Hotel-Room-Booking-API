@@ -1,6 +1,7 @@
 
 using Hotel_Room_Booking_API.Database;
-using Hotel_Room_Booking_API.Model;
+using Hotel_Room_Booking_API.Repositories;
+using Hotel_Room_Booking_API.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace Hotel_Room_Booking_API
@@ -12,7 +13,12 @@ namespace Hotel_Room_Booking_API
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddDbContext<AppDbContext>(options =>options.UseInMemoryDatabase("HotelDb"));
+            builder.Services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("HotelDb"));
+
+            builder.Services.AddScoped<IRoomRepository, RoomRepository>();
+            builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+            builder.Services.AddScoped<IRoomService, RoomService>();
+            builder.Services.AddScoped<IBookingService, BookingService>();
 
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
