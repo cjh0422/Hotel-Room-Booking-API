@@ -4,12 +4,12 @@ using Hotel_Room_Booking_API.Repositories;
 using Hotel_Room_Booking_API.Services;
 using Microsoft.EntityFrameworkCore;
 
-namespace Hotel_Room_Booking_API
-{
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
+//namespace Hotel_Room_Booking_API
+//{
+//    public class Program
+//    {
+//        public static void Main(string[] args)
+//        {
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
@@ -56,6 +56,6 @@ namespace Hotel_Room_Booking_API
             app.MapControllers();
 
             app.Run();
-        }
-    }
-}
+//        }
+//    }
+//}
