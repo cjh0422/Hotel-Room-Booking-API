@@ -1,0 +1,222 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hotel Room Booking System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1, h2 {
+            color: #2c3e50;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .section {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #3498db;
+            color: white;
+        }
+
+        .available {
+            color: green;
+            font-weight: bold;
+        }
+
+        .booked {
+            color: red;
+            font-weight: bold;
+        }
+
+        form {
+            display: grid;
+            gap: 10px;
+            max-width: 400px;
+        }
+
+        input, button {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background: #27ae60;
+            color: white;
+            cursor: pointer;
+        }
+
+            button:hover {
+                background: #219a52;
+            }
+
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏨 Hotel Room Booking System</h1>
+
+        <div class="section">
+            <h2>Available Rooms</h2>
+            <div id="rooms"></div>
+        </div>
+
+        <div class="section">
+            <h2>Current Bookings</h2>
+            <div id="bookings"></div>
+        </div>
+
+        <div class="section">
+            <h2>Book a Room</h2>
+            <form id="bookingForm">
+                <input type="text" id="guestName" placeholder="Your Name" required />
+                <input type="number" id="roomId" placeholder="Room ID (e.g., 1)" required />
+                <input type="date" id="checkIn" required />
+                <input type="date" id="checkOut" required />
+                <button type="submit">Book Now</button>
+            </form>
+            <p id="message"></p>
+        </div>
+    </div>
+
+    <script>
+    const API_BASE = 'https://localhost:7128/api'; // Change port if different
+
+    // Load rooms
+    async function loadRooms() {
+      try {
+        const res = await fetch(`${API_BASE}/rooms`);
+        const rooms = await res.json();
+        const div = document.getElementById('rooms');
+        div.innerHTML = `
+          <table>
+            <tr><th>ID</th><th>Name</th><th>Type</th><th>Status</th></tr>
+            ${rooms.map(r => `
+              <tr>
+                <td>${r.id}</td>
+                <td>${r.name}</td>
+                <td>${r.type}</td>
+                <td class="${r.isAvailable ? 'available' : 'booked'}">
+                  ${r.isAvailable ? 'Available' : 'Booked'}
+                </td>
+              </tr>
+            `).join('')}
+          </table>
+        `;
+      } catch (err) {
+          console.error(err); 
+          document.getElementById('rooms').innerHTML = '<p class="error">Failed to load rooms. Check console.</p>';
+      }
+    }
+
+    // Load bookings
+    async function loadBookings() {
+      try {
+        const res = await fetch(`${API_BASE}/bookings`);
+        const bookings = await res.json();
+        const div = document.getElementById('bookings');
+        if (bookings.length === 0) {
+          div.innerHTML = '<p>No bookings yet.</p>';
+          return;
+        }
+        div.innerHTML = `
+          <table>
+            <tr><th>Guest</th><th>Room ID</th><th>Check-in</th><th>Check-out</th></tr>
+            ${bookings.map(b => `
+              <tr>
+                <td>${b.guestName}</td>
+                <td>${b.roomId}</td>
+                <td>${new Date(b.checkInDate).toLocaleDateString()}</td>
+                <td>${new Date(b.checkOutDate).toLocaleDateString()}</td>
+              </tr>
+            `).join('')}
+          </table>
+        `;
+      } catch (err) {
+          console.error(err);
+          document.getElementById('bookings').innerHTML = '<p class="error">Failed to load bookings. Check console.</p>';
+      }
+    }
+
+    // Create booking
+    document.getElementById('bookingForm').onsubmit = async (e) => {
+      e.preventDefault();
+      const message = document.getElementById('message');
+      message.textContent = '';
+
+      const booking = {
+        guestName: document.getElementById('guestName').value,
+        roomId: parseInt(document.getElementById('roomId').value),
+        checkInDate: document.getElementById('checkIn').value,
+        checkOutDate: document.getElementById('checkOut').value
+      };
+
+      try {
+        const res = await fetch(`${API_BASE}/bookings`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(booking)
+        });
+
+        if (res.ok) {
+          message.textContent = 'Booking successful!';
+          message.className = 'success';
+          document.getElementById('bookingForm').reset();
+          loadRooms();
+          loadBookings();
+        } else {
+            const error = await res.text();
+            message.textContent = 'Error: ' + (error || 'Unknown error');
+            message.className = 'error';
+        }
+      } catch (err) {
+        message.textContent = 'Network error';
+        message.className = 'error';
+      }
+    };
+
+    // Initial load
+    loadRooms();
+    loadBookings();
+    </script>
+</body>
+</html>

@@ -1,5 +1,6 @@
 
 using Hotel_Room_Booking_API.Database;
+using Hotel_Room_Booking_API.Model;
 using Hotel_Room_Booking_API.Repositories;
 using Hotel_Room_Booking_API.Services;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +22,15 @@ using Microsoft.EntityFrameworkCore;
             builder.Services.AddScoped<IBookingService, BookingService>();
 
             builder.Services.AddControllers();
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", policy =>
+                {
+                    policy.AllowAnyOrigin()
+                          .AllowAnyMethod()
+                          .AllowAnyHeader();
+                });
+            });
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             //builder.Services.AddOpenApi();
             builder.Services.AddEndpointsApiExplorer();
@@ -35,9 +45,16 @@ using Microsoft.EntityFrameworkCore;
                 // seed initial data
                 if (!db.Rooms.Any())
                 {
-                    Console.WriteLine("Seeding rooms...");
+                    db.Rooms.AddRange(
+                       new Room { Id = 1, Name = "101", Type = "Single", IsAvailable = true },
+                       new Room { Id = 2, Name = "102", Type = "Single", IsAvailable = true },
+                       new Room { Id = 3, Name = "201", Type = "Double", IsAvailable = true },
+                       new Room { Id = 4, Name = "301", Type = "Suite", IsAvailable = true }
+                    );
+                    db.SaveChanges();
+                    Console.WriteLine("Seeded 4 rooms!");
 
-                }
+    }
             }
 
             // Configure the HTTP request pipeline.
@@ -47,6 +64,8 @@ using Microsoft.EntityFrameworkCore;
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            app.UseCors("AllowAll");
+            app.UseStaticFiles();
 
             app.UseHttpsRedirection();
 

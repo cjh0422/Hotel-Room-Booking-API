@@ -5,11 +5,11 @@ using Hotel_Room_Booking_API.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace Hotel_Room_Booking_API.Controllers
-{
+//namespace Hotel_Room_Booking_API.Controllers
+//{
     [ApiController]
-    [Route("api/[controller]")]
-    public class BookingController : ControllerBase
+    [Route("api/bookings")]
+    public class BookingsController : ControllerBase
     {
         //private readonly AppDbContext _context;
 
@@ -18,7 +18,7 @@ namespace Hotel_Room_Booking_API.Controllers
         //    _context = context;
         //}
         private readonly IBookingService _service;
-        public BookingController(IBookingService service) => _service = service;
+        public BookingsController(IBookingService service) => _service = service;
 
         //[HttpGet]
         //public async Task<ActionResult<List<Booking>>> GetBookings()
@@ -55,4 +55,4 @@ namespace Hotel_Room_Booking_API.Controllers
             catch (InvalidOperationException ex) { return BadRequest(ex.Message); }
         }
     }
-}
+//}

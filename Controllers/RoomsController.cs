@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Hotel_Room_Booking_API.Controllers
-{
+//namespace Hotel_Room_Booking_API.Controllers
+//{
     [ApiController]
-    [Route("api/[controller]")]
-    public class RoomController : ControllerBase
+    [Route("api/rooms")]
+    public class RoomsController : ControllerBase
     {
         //private readonly AppDbContext _context;
 
@@ -19,7 +19,7 @@ namespace Hotel_Room_Booking_API.Controllers
         //}
         private readonly IRoomService _service;
 
-        public RoomController(IRoomService service) => _service = service;
+        public RoomsController(IRoomService service) => _service = service;
 
         //[HttpGet]
         //public async Task<ActionResult<List<Room>>> GetRooms()
@@ -30,4 +30,4 @@ namespace Hotel_Room_Booking_API.Controllers
         public async Task<ActionResult<List<Room>>> Get() => await _service.GetAllRoomsAsync();
 
     }
-}
+//}
