@@ -55,3 +55,8 @@ A simple API for managing hotel rooms and bookings, built with **ASP.NET Core We
 1. Microsoft.AspNetCore.OpenApi - OpenAPI/Swagger support
 2. Microsoft.EntityFrameworkCore.InMemory – In-memory database
 3. Swashbuckle.AspNetCore – Swagger documentation
+
+
+## Updtates by 28 Dec 205
+- Created a html client to interact with the API. 
+- user can click on index.html or https://localhost:xxxx/index.html to open the client and interact with the API.
